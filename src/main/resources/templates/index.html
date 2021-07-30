@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Programmier Challenges</title>
+</head>
+<body>
+<h1>Welcome</h1>
+
+
+<button type="button" id="Challenge 1" onclick="startChallenge()">Challenge 1</button>
+
+<script>
+    function startChallenge(){
+    var challengeId = JSON.stringify({"Challenge":1})
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function (){
+        if(this.readyState === 4 && this.status === 200){
+            console.log(this.responseText);
+        }
+    }
+        xhr.open("POST", "index", true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(challengeId);
+
+    }
+
+</script>
+
+</body>
+
+</html>
