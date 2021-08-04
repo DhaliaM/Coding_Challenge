@@ -2,17 +2,24 @@ package com.coding.challenge.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
-
+@Component
 public class Challenge1 implements Challenge{
     private static final Logger LOGGER = LoggerFactory.getLogger(Challenge1.class);
+    private static final int ID = 1;
 
     public Challenge1(HttpService httpService) {
         this.httpService = httpService;
     }
 
     HttpService httpService;
+
+    @Override
+    public int getId() {
+        return ID;
+    }
 
     public void runChallenge() {
 
@@ -24,7 +31,6 @@ public class Challenge1 implements Challenge{
         HttpResponse solution = httpService.sendSolutionToken(urlSolution,jsonSolution);
 
         LOGGER.error(String.valueOf(solution.statusCode()));
-
 
     }
 

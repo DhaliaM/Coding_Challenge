@@ -41,7 +41,6 @@ public class HttpService {
         HttpResponse responseSolution = null;
         try {
             responseSolution = client.send(requestSolution, HttpResponse.BodyHandlers.discarding());
-//            LOGGER.error(String.valueOf(responseSolution.statusCode()));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
