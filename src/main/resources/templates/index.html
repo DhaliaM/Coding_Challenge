@@ -6,22 +6,42 @@
 </head>
 <body>
 <h1>Welcome</h1>
+<table>
+    <tbody>
+    <tr th:each="challenge: ${challengeList}">
+        <td>
+            <button type="button" th:id="'challengeId.' + ${challenge.getId()}" onclick="startChallenge()"
+                    th:text="'Challenge ' + ${challenge.getId()}"></button>
+        </td>
+        <td>
+            <div th:id="'status.' + ${challenge.getId()}" style="background-color: red ; width: 20px; padding: 10px; border: 1px solid black;"></div>
+        </td>
+    </tr>
 
-
-<button type="button" id="Challenge 1" onclick="startChallenge()">Challenge 1</button>
+    </tbody>
+</table>
 
 <script>
-    function startChallenge(){
-    var challengeId = JSON.stringify({"Challenge":1})
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function (){
-        if(this.readyState === 4 && this.status === 200){
-            console.log(this.responseText);
+    function startChallenge() {
+        var challengeId = JSON.stringify({"challenge": 1})
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.response);
+            }
         }
-    }
         xhr.open("POST", "index", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.responseType= 'json';
         xhr.send(challengeId);
+        
+        xhr.onload = function () {
+
+        if(xhr.response.result=true){
+            boxId = "status." + xhr.response.challenge;
+            document.getElementById(boxId).style.backgroundColor="green";
+            }
+        }
 
     }
 
