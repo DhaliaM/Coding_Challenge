@@ -1,5 +1,7 @@
 package com.coding.challenge.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
 
 @Service
 public class HttpService {
@@ -21,7 +24,6 @@ public class HttpService {
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

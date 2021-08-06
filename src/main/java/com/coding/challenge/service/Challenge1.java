@@ -1,5 +1,6 @@
 package com.coding.challenge.service;
 
+import com.coding.challenge.ui.ChallengeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -21,17 +22,21 @@ public class Challenge1 implements Challenge{
         return ID;
     }
 
-    public void runChallenge() {
-
+    public ChallengeDto runChallenge() {
+        ChallengeDto challengeDto = new ChallengeDto();
         String urlChallenge = "https://cc.the-morpheus.de/challenges/1/";
         HttpResponse<String> response = httpService.getChallengeRaw(urlChallenge);
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
-        String jsonSolution = "{\"token\":" + response.body()+ "}";
+        String jsonSolution = "{\"token\":" + response.body() + "}";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution,jsonSolution);
 
         LOGGER.error(String.valueOf(solution.statusCode()));
-
+        if(solution.statusCode()==200){
+            challengeDto.setChallengeId(ID);
+            challengeDto.setResultChallenge(true);
+        }
+        return challengeDto;
     }
 
 }

@@ -28,11 +28,7 @@ public class Controller {
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.POST)
     public @ResponseBody ChallengeDto startChallenge(@RequestBody String request) throws JsonProcessingException {
         ChallengeDto challengeDto = new ObjectMapper().readValue(request,ChallengeDto.class);
-
-        challengeService.selectedChallenge(challengeDto.getChallengeId());
-
-        challengeDto.setResultChallenge(true);
-
+        challengeDto = challengeService.selectedChallenge(challengeDto.getChallengeId());
         return challengeDto;
     }
 

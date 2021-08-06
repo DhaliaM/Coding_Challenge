@@ -1,5 +1,6 @@
 package com.coding.challenge.service;
 
+import com.coding.challenge.ui.ChallengeDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,14 @@ public class ChallengeService {
 
     List<Challenge> challenges;
 
-    public void selectedChallenge(int id){
-
+    public ChallengeDto selectedChallenge(int id){
+        ChallengeDto challengeDto = null;
         for(Challenge challenge : challenges){
             if (id == challenge.getId()){
-                challenge.runChallenge();
+                challengeDto = challenge.runChallenge();
             }
         }
-
-
+        return challengeDto;
     }
 
 }

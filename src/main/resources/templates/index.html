@@ -10,7 +10,7 @@
     <tbody>
     <tr th:each="challenge: ${challengeList}">
         <td>
-            <button type="button" th:id="'challengeId.' + ${challenge.getId()}" onclick="startChallenge()"
+            <button type="button" th:id="'challengeId.' + ${challenge.getId()}" th:onclick="'startChallenge('+ ${challenge.getId()} + ')'"
                     th:text="'Challenge ' + ${challenge.getId()}"></button>
         </td>
         <td>
@@ -22,8 +22,8 @@
 </table>
 
 <script>
-    function startChallenge() {
-        var challengeId = JSON.stringify({"challenge": 1})
+    function startChallenge(id) {
+        var challengeId = JSON.stringify({"challenge":id})
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
