@@ -30,7 +30,7 @@ public class Challenge3 implements Challenge {
         arr[i] = arr[j];
         arr[j] = temp;
     }
-
+    //Quicksort, wobei der Pivot Punkt der gesuchte Index ist
     private static Long getKthHighest(Long[] arr, int low, int high, int kthHighest) {
         // pivot
         int pivot = kthHighest;
