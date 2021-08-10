@@ -13,7 +13,7 @@ import java.net.http.HttpResponse;
 
 @Service
 public class HttpService {
-    public HttpResponse getChallengeRaw(String urlChallenge){
+    public HttpResponse getChallengeRaw(String urlChallenge) {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlChallenge))
@@ -32,7 +32,7 @@ public class HttpService {
         return response;
     }
 
-    public HttpResponse sendSolutionToken(String urlSolution, String jsonSolution){
+    public HttpResponse sendSolutionToken(String urlSolution, String jsonSolution) {
         HttpRequest requestSolution = HttpRequest.newBuilder()
                 .uri(URI.create(urlSolution))
                 .header("Content-Type", "application/json")
@@ -48,6 +48,7 @@ public class HttpService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         return responseSolution;
     }
 }

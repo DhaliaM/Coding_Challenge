@@ -18,13 +18,14 @@ public class ChallengeService {
 
     List<Challenge> challenges;
 
-    public ChallengeDto selectedChallenge(int id){
+    public ChallengeDto selectedChallenge(int id) {
         ChallengeDto challengeDto = null;
-        for(Challenge challenge : challenges){
-            if (id == challenge.getId()){
+        for (Challenge challenge : challenges) {
+            if (id == challenge.getId()) {
                 challengeDto = challenge.runChallenge();
             }
         }
+
         return challengeDto;
     }
 

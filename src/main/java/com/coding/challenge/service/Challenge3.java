@@ -91,6 +91,7 @@ public class Challenge3 implements Challenge {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
         }
+
         return challengeDto;
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.net.http.HttpResponse;
 
-
 @Component
 public class Challenge2 implements Challenge {
     private static final int ID = 2;

@@ -5,8 +5,9 @@ import com.coding.challenge.ui.ChallengeDto;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
+
 @Component
-public class Challenge1 implements Challenge{
+public class Challenge1 implements Challenge {
     private static final int ID = 1;
 
     public Challenge1(HttpService httpService) {
@@ -27,12 +28,13 @@ public class Challenge1 implements Challenge{
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
         String jsonSolution = "{\"token\":" + response.body() + "}";
-        HttpResponse solution = httpService.sendSolutionToken(urlSolution,jsonSolution);
+        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
 
-        if(solution.statusCode()==200){
+        if (solution.statusCode() == 200) {
             challengeDto.setChallengeId(ID);
             challengeDto.setResultChallenge(true);
         }
+
         return challengeDto;
     }
 
