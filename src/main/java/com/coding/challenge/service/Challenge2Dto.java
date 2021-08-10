@@ -10,6 +10,7 @@ public class Challenge2Dto {
 
     @JsonProperty("list")
     private List<String> stringList;
+
     public String getKey() {
         return key;
     }

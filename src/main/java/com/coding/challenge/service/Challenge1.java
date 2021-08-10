@@ -1,14 +1,12 @@
 package com.coding.challenge.service;
 
 import com.coding.challenge.ui.ChallengeDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
 @Component
 public class Challenge1 implements Challenge{
-    private static final Logger LOGGER = LoggerFactory.getLogger(Challenge1.class);
     private static final int ID = 1;
 
     public Challenge1(HttpService httpService) {
@@ -31,7 +29,6 @@ public class Challenge1 implements Challenge{
         String jsonSolution = "{\"token\":" + response.body() + "}";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution,jsonSolution);
 
-        LOGGER.error(String.valueOf(solution.statusCode()));
         if(solution.statusCode()==200){
             challengeDto.setChallengeId(ID);
             challengeDto.setResultChallenge(true);

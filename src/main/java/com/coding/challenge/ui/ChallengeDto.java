@@ -7,8 +7,6 @@ public class ChallengeDto {
     @JsonProperty("challenge")
     private int challengeId = 0;
 
-
-
     @JsonProperty("result")
     private boolean resultChallenge = false;
 
@@ -22,6 +20,7 @@ public class ChallengeDto {
     public void setChallengeId(int challengeId) {
         this.challengeId = challengeId;
     }
+
     public boolean getResultChallenge() {
         return resultChallenge;
     }
@@ -37,6 +36,7 @@ public class ChallengeDto {
     public void setUsedTime(float usedTime) {
         this.usedTime = usedTime;
     }
+
     @Override
     public String toString() {
         return "ChallengeDto{" +

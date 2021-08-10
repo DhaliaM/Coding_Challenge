@@ -14,7 +14,7 @@ public class Controller {
     final ChallengeService challengeService;
     List<Challenge> challengeList;
 
-    public Controller(ChallengeService challengeService,List<Challenge> challengeList) {
+    public Controller(ChallengeService challengeService, List<Challenge> challengeList) {
         this.challengeList = challengeList;
         this.challengeService = challengeService;
     }
@@ -22,13 +22,16 @@ public class Controller {
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String index(Model model) {
         model.addAttribute("challengeList", challengeList);
+
         return "index";
     }
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.POST)
-    public @ResponseBody ChallengeDto startChallenge(@RequestBody String request) throws JsonProcessingException {
-        ChallengeDto challengeDto = new ObjectMapper().readValue(request,ChallengeDto.class);
+    public @ResponseBody
+    ChallengeDto startChallenge(@RequestBody String request) throws JsonProcessingException {
+        ChallengeDto challengeDto = new ObjectMapper().readValue(request, ChallengeDto.class);
         challengeDto = challengeService.selectedChallenge(challengeDto.getChallengeId());
+
         return challengeDto;
     }
 

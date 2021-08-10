@@ -2,8 +2,6 @@ package com.coding.challenge.service;
 
 import com.coding.challenge.ui.ChallengeDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -28,7 +26,7 @@ public class Challenge2 implements Challenge {
 
         ChallengeDto challengeDto = new ChallengeDto();
         int index = 0;
-        long executionTime; // Zeit zum durchsuchen der Liste ohne Server Zeiten
+        long executionTime; // Zeit zum durchsuchen der Liste, ohne Server Zeiten
         long startTime;
         long endTime;
         long requestTime = 0;
