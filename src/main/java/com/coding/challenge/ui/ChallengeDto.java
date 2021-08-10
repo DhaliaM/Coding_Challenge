@@ -2,16 +2,20 @@ package com.coding.challenge.ui;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Ein DTO für den Informationsaustausch zwischen Webseite und Server.
+ *
+ * @author Dhalia
+ */
 public class ChallengeDto {
-
     @JsonProperty("challenge")
-    private int challengeId = 0;
+    private int challengeId;
 
     @JsonProperty("result")
-    private boolean resultChallenge = false;
+    private boolean resultChallenge;
 
     @JsonProperty("usedTime")
-    private float usedTime = 0;
+    private float usedTime;
 
     public int getChallengeId() {
         return challengeId;
@@ -41,6 +45,8 @@ public class ChallengeDto {
     public String toString() {
         return "ChallengeDto{" +
                 "challengeId=" + challengeId +
+                ", resultChallenge=" + resultChallenge +
+                ", usedTime=" + usedTime +
                 '}';
     }
 

@@ -1,23 +1,29 @@
 package com.coding.challenge.service;
 
 import com.coding.challenge.ui.ChallengeDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
+/**
+ * Ein Service um die unterschiedlichen Challenges zu starten.
+ *
+ * @author Dhalia
+ */
 @Service
 public class ChallengeService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChallengeService.class);
+    private final List<Challenge> challenges;
 
     public ChallengeService(List<Challenge> challenges) {
         this.challenges = challenges;
     }
 
-    List<Challenge> challenges;
-
+    /**
+     * Startet die ausgewählte Challenge.
+     *
+     * @param id - Id der zu startenden Challenge
+     * @return Objekt vom Typ ChallengeDto
+     */
     public ChallengeDto selectedChallenge(int id) {
         ChallengeDto challengeDto = null;
         for (Challenge challenge : challenges) {

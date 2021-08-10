@@ -9,79 +9,63 @@ import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Diese Klasse absolviert die 3. Challenge.
+ * Die Challenge besteht darin die Daten aus dem Body der Webseite "https://cc.the-morpheus.de/challenges/3/" über GET
+ * zu extrahieren, und diesen an "https://cc.the-morpheus.de/solutions/3/" via POST zu senden.
+ *
+ * @author Dhalia
+ */
 @Component
 public class Challenge3 implements Challenge {
-    HttpService httpService;
-
-    public Challenge3(HttpService httpService) {
-        this.httpService = httpService;
-    }
-
     private static final int ID = 3;
+    private final HttpService httpService;
+    private final KthSearchAlgorithm kthSearchAlgorithm;
+
+    public Challenge3(HttpService httpService, KthSearchAlgorithm kthSearchAlgorithm) {
+        this.httpService = httpService;
+        this.kthSearchAlgorithm = kthSearchAlgorithm;
+    }
 
     @Override
     public int getId() {
         return ID;
     }
 
-    // A utility function to swap two elements
-    private static void swap(Long[] arr, int i, int j) {
-        Long temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
-    //Quicksort, wobei der Pivot Punkt der gesuchte Index ist
-    private static Long getKthHighest(Long[] arr, int low, int high, int kthHighest) {
-        // pivot
-        int pivot = kthHighest;
-
-        // Index of smaller element and
-        // indicates the right position
-        // of pivot found so far
-        int i = (low - 1);
-
-        for (int j = low; j <= high - 1; j++) {
-
-            // If current element is smaller
-            // than the pivot
-            if (arr[j] < pivot) {
-                // Increment index of
-                // smaller element
-                i++;
-                swap(arr, i, j);
-            }
-        }
-        swap(arr, i + 1, high);
-
-        return (arr[kthHighest]);
-    }
-
+    /**
+     * Startet die Challenge.
+     *
+     * @return Objekt vom Typ ChallengeDto
+     */
     @Override
     public ChallengeDto runChallenge() {
 
         String urlChallenge = "https://cc.the-morpheus.de/challenges/3/";
-        HttpResponse<String> response = httpService.getChallengeRaw(urlChallenge);
+        HttpResponse<String> response = httpService.getChallenge(urlChallenge);
 
-        Challenge2Dto requestChallenge = null;
+        GetChallengeDto requestChallenge = null;
 
         try {
-            requestChallenge = new ObjectMapper().readValue(response.body(), Challenge2Dto.class);
+            requestChallenge = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+        Long result = null;
+        if (requestChallenge != null) {
+            List<Long> listAsLong = requestChallenge.getStringList()
+                    .stream()
+                    .map(Long::valueOf).collect(Collectors.toList());
 
-        List<Long> listAsLong = requestChallenge.getStringList().stream().map(x ->
-                Long.valueOf(x)).collect(Collectors.toList());
+            Long[] arr = new Long[listAsLong.size()];
+            arr = listAsLong.toArray(arr);
 
-        Long[] arr = new Long[listAsLong.size()];
-        arr = listAsLong.toArray(arr);
+            int start = 0;
+            int end = arr.length - 1;
+            int kthHighest = arr.length - Integer.parseInt(requestChallenge.getKey());
 
-        int start = 0;
-        int end = arr.length - 1;
-        int kthHighest = arr.length - Integer.parseInt(requestChallenge.getKey());
-
-        Long result = getKthHighest(arr, start, end, kthHighest);
-
+            result = kthSearchAlgorithm.getKthHighest(arr, start, end, kthHighest);
+        }
         String urlSolution = "https://cc.the-morpheus.de/solutions/3/";
         String jsonSolution = "{\"token\":" + result + "}";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);

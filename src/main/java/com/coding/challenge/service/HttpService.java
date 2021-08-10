@@ -1,7 +1,5 @@
 package com.coding.challenge.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -10,10 +8,20 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
+/**
+ * Ein Service um die Http-Verbindung für GET und POST herzustellen.
+ *
+ * @author Dhalia
+ */
 @Service
 public class HttpService {
-    public HttpResponse getChallengeRaw(String urlChallenge) {
+    /**
+     * Holt die Challenge Daten von der übergebenen Zieladresse mittels GET.
+     *
+     * @param urlChallenge Zieladresse
+     * @return HttpResponse Objekt
+     */
+    public HttpResponse getChallenge(String urlChallenge) {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlChallenge))
@@ -21,17 +29,23 @@ public class HttpService {
                 .build();
 
         HttpClient client = HttpClient.newHttpClient();
-        HttpResponse<String> response = null;
+        HttpResponse response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
         return response;
     }
 
+    /**
+     * Sendet die Json Daten an die übergebene Adresse.
+     *
+     * @param urlSolution  Zieladresse
+     * @param jsonSolution Daten im Json Format
+     * @return Http Statuscode der Zieladresse
+     */
     public HttpResponse sendSolutionToken(String urlSolution, String jsonSolution) {
         HttpRequest requestSolution = HttpRequest.newBuilder()
                 .uri(URI.create(urlSolution))
@@ -43,9 +57,7 @@ public class HttpService {
         HttpResponse responseSolution = null;
         try {
             responseSolution = client.send(requestSolution, HttpResponse.BodyHandlers.discarding());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 

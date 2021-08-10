@@ -4,7 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class Challenge2Dto {
+/**
+ * Ein DTO um die Json-Daten von https://cc.the-morpheus.de/challenges/n/ zu extrahieren.
+ *
+ * @author Dhalia
+ */
+public class GetChallengeDto {
     @JsonProperty("k")
     private String key;
 

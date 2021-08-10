@@ -6,25 +6,37 @@ import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
 
+/**
+ * Diese Klasse absolviert die 1. Challenge.
+ * Die Challenge besteht darin die Daten aus dem Body der Webseite "https://cc.the-morpheus.de/challenges/1/" über GET
+ * zu extrahieren, und diesen an "https://cc.the-morpheus.de/solutions/1/" via POST zu senden.
+ *
+ * @author Dhalia
+ */
 @Component
 public class Challenge1 implements Challenge {
     private static final int ID = 1;
+    private final HttpService httpService;
 
     public Challenge1(HttpService httpService) {
         this.httpService = httpService;
     }
-
-    HttpService httpService;
 
     @Override
     public int getId() {
         return ID;
     }
 
+    /**
+     * Startet die Challenge.
+     *
+     * @return Objekt vom Typ ChallengeDto
+     */
+    @Override
     public ChallengeDto runChallenge() {
         ChallengeDto challengeDto = new ChallengeDto();
         String urlChallenge = "https://cc.the-morpheus.de/challenges/1/";
-        HttpResponse<String> response = httpService.getChallengeRaw(urlChallenge);
+        HttpResponse response = httpService.getChallenge(urlChallenge);
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
         String jsonSolution = "{\"token\":" + response.body() + "}";
