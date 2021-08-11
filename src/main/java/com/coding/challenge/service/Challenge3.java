@@ -65,9 +65,10 @@ public class Challenge3 implements Challenge {
 
             result = kthSearchAlgorithm.getKthHighest(arr, start, end, kthHighest);
         }
+
+        String jsonResult = String.valueOf(result);
         String urlSolution = "https://cc.the-morpheus.de/solutions/3/";
-        String jsonSolution = "{\"token\":" + result + "}";
-        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
+        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {

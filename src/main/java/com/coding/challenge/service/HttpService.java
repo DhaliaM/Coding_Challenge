@@ -42,10 +42,11 @@ public class HttpService {
      * Sendet die Json Daten an die übergebene Adresse.
      *
      * @param urlSolution  Zieladresse
-     * @param jsonSolution Daten im Json Format
+     * @param jsonResult Daten im Json Format
      * @return Http Statuscode der Zieladresse
      */
-    public HttpResponse sendSolutionToken(String urlSolution, String jsonSolution) {
+    public HttpResponse sendSolutionToken(String urlSolution, String jsonResult) {
+        String jsonSolution = "{\"token\":" + jsonResult + "}";
         HttpRequest requestSolution = HttpRequest.newBuilder()
                 .uri(URI.create(urlSolution))
                 .header("Content-Type", "application/json")

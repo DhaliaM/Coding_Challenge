@@ -38,8 +38,8 @@ public class Challenge1 implements Challenge {
         HttpResponse response = httpService.getChallenge(urlChallenge);
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
-        String jsonSolution = "{\"token\":" + response.body() + "}";
-        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
+        String jsonResult = (String) response.body();
+        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {

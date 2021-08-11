@@ -58,8 +58,8 @@ public class Challenge2 implements Challenge {
         long executionTime = (endTime - startTime - requestTime) / numberOfRuns; // Zeit zum durchsuchen der Liste, ohne Server Zeiten
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
-        String jsonSolution = "{\"token\":" + index + "}";
-        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
+        String jsonResult = String.valueOf(index);
+        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {

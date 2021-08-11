@@ -53,16 +53,15 @@ public class Challenge4 implements Challenge {
 
         Collections.rotate(challengeDataList, rotations);
 
-        String jsonList = null;
+        String jsonResult = null;
         try {
-            jsonList = new ObjectMapper().writeValueAsString(challengeDataList);
+            jsonResult = new ObjectMapper().writeValueAsString(challengeDataList);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/4/";
-        String jsonSolution = "{\"token\":" + jsonList + "}";
-        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
+        HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
