@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 
 /**
  * Diese Klasse absolviert die 1. Challenge.
- * Die Challenge besteht darin die Daten aus dem Body der Webseite "https://cc.the-morpheus.de/challenges/1/" über GET
+ * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/1/" über GET
  * zu extrahieren, und diesen an "https://cc.the-morpheus.de/solutions/1/" via POST zu senden.
  *
  * @author Dhalia
@@ -34,7 +34,6 @@ public class Challenge1 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
-        ChallengeDto challengeDto = new ChallengeDto();
         String urlChallenge = "https://cc.the-morpheus.de/challenges/1/";
         HttpResponse response = httpService.getChallenge(urlChallenge);
 
@@ -42,6 +41,7 @@ public class Challenge1 implements Challenge {
         String jsonSolution = "{\"token\":" + response.body() + "}";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
 
+        ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setChallengeId(ID);
             challengeDto.setResultChallenge(true);

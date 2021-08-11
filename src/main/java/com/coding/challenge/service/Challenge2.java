@@ -9,8 +9,9 @@ import java.net.http.HttpResponse;
 
 /**
  * Diese Klasse absolviert die 2. Challenge.
- * Die Challenge besteht darin die Daten aus dem Body der Webseite "https://cc.the-morpheus.de/challenges/2/" über GET
- * zu extrahieren, und diesen an "https://cc.the-morpheus.de/solutions/2/" via POST zu senden.
+ * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/2/" über GET
+ * zu extrahieren, und den Inhalt des gesuchten Index in einer Liste an "https://cc.the-morpheus.de/solutions/2/"
+ * via POST zu senden.
  *
  * @author Dhalia
  */
@@ -35,8 +36,6 @@ public class Challenge2 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
-        ChallengeDto challengeDto = new ChallengeDto();
-
         long requestTime = 0;
         long startTime = System.nanoTime();
         int index = 0;
@@ -62,6 +61,7 @@ public class Challenge2 implements Challenge {
         String jsonSolution = "{\"token\":" + index + "}";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonSolution);
 
+        ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             int nanoTimeToMs = 1000000;
             challengeDto.setResultChallenge(true);

@@ -34,7 +34,6 @@ public class KthSearchAlgorithm {
      * @return die Zahl an kth höchster Stelle im Array, vom Typ Long
      */
     public Long getKthHighest(Long[] arr, int low, int high, int kthHighest) {
-
         int pivot = kthHighest;
 
         // Index of smaller element and

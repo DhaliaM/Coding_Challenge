@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 /**
  * Diese Klasse absolviert die 3. Challenge.
- * Die Challenge besteht darin die Daten aus dem Body der Webseite "https://cc.the-morpheus.de/challenges/3/" über GET
- * zu extrahieren, und diesen an "https://cc.the-morpheus.de/solutions/3/" via POST zu senden.
+ * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/3/" über GET
+ * zu extrahieren, und die Kth höchste Zahl zurück an "https://cc.the-morpheus.de/solutions/3/" via POST zu senden.
  *
  * @author Dhalia
  */
@@ -39,7 +39,6 @@ public class Challenge3 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
-
         String urlChallenge = "https://cc.the-morpheus.de/challenges/3/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
 

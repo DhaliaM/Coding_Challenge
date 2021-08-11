@@ -22,7 +22,6 @@ public class HttpService {
      * @return HttpResponse Objekt
      */
     public HttpResponse getChallenge(String urlChallenge) {
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(urlChallenge))
                 .GET()
