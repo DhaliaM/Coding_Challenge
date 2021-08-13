@@ -41,8 +41,8 @@ public class HttpService {
     /**
      * Sendet die Json Daten an die übergebene Adresse.
      *
-     * @param urlSolution  Zieladresse
-     * @param jsonResult Daten im Json Format
+     * @param urlSolution Zieladresse
+     * @param jsonResult  Daten im Json Format
      * @return Http Statuscode der Zieladresse
      */
     public HttpResponse sendSolutionToken(String urlSolution, String jsonResult) {

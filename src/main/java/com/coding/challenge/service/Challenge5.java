@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * Diese Klasse absolviert die 5. Challenge.
  * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/5/" über GET
- * zu extrahieren, eine Berechnung in Postfix Notation durchzuführen und das Ergebnis zurück an
+ * zu extrahieren, eine Berechnung in Postfix Notation durchzuführen und das Ergebnis als int(abgerundet) zurück an
  * "https://cc.the-morpheus.de/solutions/5/" via POST zu senden.
  *
  * @author Dhalia
