@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 /**
  * Diese Klasse absolviert die 6. Challenge.
- * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/5/" über GET
+ * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/6/" über GET
  * zu extrahieren, die erhaltene Dezimalzahl in binär umwandeln und das Ergebnis zurück an
- * "https://cc.the-morpheus.de/solutions/5/" via POST zu senden.
+ * "https://cc.the-morpheus.de/solutions/6/" via POST zu senden.
  *
  * @author Dhalia
  */
