@@ -53,7 +53,6 @@ public class Challenge3 implements Challenge {
         benchmark.firstExclusiveBenchmark(false);
 
         GetChallengeDto challengeData = null;
-
         try {
             challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
 
