@@ -3,6 +3,8 @@ package com.coding.challenge.service;
 import com.coding.challenge.ui.ChallengeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
@@ -21,11 +23,15 @@ public class Challenge3 implements Challenge {
     private static final int ID = 3;
     private final HttpService httpService;
     private final KthSearchAlgorithm kthSearchAlgorithm;
+    private final Benchmark benchmark;
 
-    public Challenge3(HttpService httpService, KthSearchAlgorithm kthSearchAlgorithm) {
+    public Challenge3(HttpService httpService, KthSearchAlgorithm kthSearchAlgorithm, Benchmark benchmark) {
         this.httpService = httpService;
         this.kthSearchAlgorithm = kthSearchAlgorithm;
+        this.benchmark = benchmark;
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Challenge3.class);
 
     @Override
     public int getId() {
@@ -39,20 +45,24 @@ public class Challenge3 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
+        benchmark.runBenchmark(true);
+
+        benchmark.firstExclusiveBenchmark(true);
         String urlChallenge = "https://cc.the-morpheus.de/challenges/3/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
+        benchmark.firstExclusiveBenchmark(false);
 
-        GetChallengeDto requestChallenge = null;
+        GetChallengeDto challengeData = null;
 
         try {
-            requestChallenge = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
+            challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
 
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         Long result = null;
-        if (requestChallenge != null) {
-            List<Long> listAsLong = requestChallenge.getStringList()
+        if (challengeData != null) {
+            List<Long> listAsLong = challengeData.getStringList()
                     .stream()
                     .map(Long::valueOf).collect(Collectors.toList());
 
@@ -61,21 +71,27 @@ public class Challenge3 implements Challenge {
 
             int start = 0;
             int end = arr.length - 1;
-            int kthHighest = arr.length - Integer.parseInt(requestChallenge.getKey());
+            int kthHighest = arr.length - Integer.parseInt(challengeData.getKey());
 
             result = kthSearchAlgorithm.getKthHighest(arr, start, end, kthHighest);
         }
 
+        benchmark.secondExclusiveBenchmark(true);
         String jsonResult = String.valueOf(result);
         String urlSolution = "https://cc.the-morpheus.de/solutions/3/";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+        benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
+            challengeDto.setUsedTime(benchmark.getBenchmarkTime());
         }
-
+        LOGGER.error(benchmark.getFirstExclusiveBenchmarkTime() + "ms");
+        LOGGER.error(benchmark.getSecondExclusiveBenchmarkTime() + "ms");
+        LOGGER.error(benchmark.getBenchmarkTime() + "ms");
         return challengeDto;
     }
 }

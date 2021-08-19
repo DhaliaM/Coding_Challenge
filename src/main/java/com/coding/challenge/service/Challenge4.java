@@ -51,6 +51,7 @@ public class Challenge4 implements Challenge {
             e.printStackTrace();
         }
 
+        assert challengeDataList != null;
         Collections.rotate(challengeDataList, rotations);
 
         String jsonResult = null;

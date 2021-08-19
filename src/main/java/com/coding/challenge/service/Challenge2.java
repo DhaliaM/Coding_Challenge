@@ -48,14 +48,14 @@ public class Challenge2 implements Challenge {
             requestTime = requestTime + (requestStopTime - requestStartTime);
 
             try {
-                GetChallengeDto result = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
-                index = result.getStringList().indexOf(result.getKey());
+                GetChallengeDto challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
+                index = challengeData.getStringList().indexOf(challengeData.getKey());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         long endTime = System.nanoTime();
-        long executionTime = (endTime - startTime - requestTime) / numberOfRuns; // Zeit zum durchsuchen der Liste, ohne Server Zeiten
+        long executionTime = (endTime - startTime - requestTime) / numberOfRuns; // Zeit zum Durchsuchen der Liste, ohne Server Zeiten
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
         String jsonResult = String.valueOf(index);

@@ -44,13 +44,16 @@ public class Challenge7 implements Challenge {
         String urlChallenge = "https://cc.the-morpheus.de/challenges/7/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
         GetChallengeDto challengeData = null;
+        int key =0;
         try {
             challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
+            key = Integer.parseInt(challengeData.getKey());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        int key = Integer.parseInt(challengeData.getKey());
+
+        assert challengeData != null;
         List<Integer> listSearchData = challengeData.getStringList().stream()
                 .map(Integer::valueOf)
                 .collect(Collectors.toList());

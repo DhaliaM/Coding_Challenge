@@ -42,7 +42,7 @@ public class Challenge6 implements Challenge {
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
         String challengeData = response.body();
 
-        Long decimalData = Long.valueOf(challengeData);
+        long decimalData = Long.parseLong(challengeData);
         List<Integer> listedRemainder = new ArrayList<>();
         while (decimalData > 0) {
             listedRemainder.add((int) (decimalData % 2));
@@ -52,10 +52,10 @@ public class Challenge6 implements Challenge {
         List<Integer> reverseList = listedRemainder.stream()
                 .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
-        String result = reverseList.toString();
+        String jsonResult = reverseList.toString();
 
         String urlSolution = "https://cc.the-morpheus.de/solutions/6/";
-        String jsonResult = result;
+
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
 
         ChallengeDto challengeDto = new ChallengeDto();
