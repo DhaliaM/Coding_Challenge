@@ -7,14 +7,33 @@
 <body>
 <h1>Welcome</h1>
 <table>
+    <th>Firstname</th>
+    <th></th>
+    <th style="width: 100px" ;>avg. Function Time</th>
+    <th style="width: 100px" ;>avg. Server GET Time</th>
+    <th style="width: 100px" ;>avg. Server POST Time</th>
     <tbody>
     <tr th:each="challenge: ${challengeList}">
         <td>
-            <button type="button" th:id="'challengeId.' + ${challenge.getId()}" th:onclick="'startChallenge('+ ${challenge.getId()} + ')'"
+            <button type="button" th:id="'challengeId.' + ${challenge.getId()}"
+                    th:onclick="'startChallenge('+ ${challenge.getId()} + ',' + ${challengeList.size()} +')'"
                     th:text="'Challenge ' + ${challenge.getId()}"></button>
         </td>
         <td>
-            <div th:id="'status.' + ${challenge.getId()}" style="background-color: red ; width: 20px; padding: 10px; border: 1px solid black;"></div>
+            <div th:id="'status.' + ${challenge.getId()}"
+                 style="background-color: red ; width: 20px; padding: 10px; border: 1px solid black;"></div>
+        </td>
+        <td>
+            <div th:id="'functionTime.' + ${challenge.getId()}"
+                 style="background-color: white ; text-align: right; width: 100px; height: 20px; font-size: 16px; border: 1px solid black;"></div>
+        </td>
+        <td>
+            <div th:id="'GET_Time.' + ${challenge.getId()}"
+                 style="background-color: white ; text-align: right; width: 100px; height: 20px; font-size: 16px; border: 1px solid black;"></div>
+        </td>
+        <td>
+            <div th:id="'POST_Time.' + ${challenge.getId()}"
+                 style="background-color: white ; text-align: right; width: 100px; height: 20px; font-size: 16px; border: 1px solid black;"></div>
         </td>
     </tr>
 
@@ -22,8 +41,12 @@
 </table>
 
 <script>
-    function startChallenge(id) {
-        var challengeId = JSON.stringify({"challenge":id})
+    function startChallenge(id, listSize) {
+        for(let i =1; i <= listSize;i++){
+            document.getElementById("challengeId."+ i).disabled=true;
+        }
+
+        var challengeId = JSON.stringify({"challengeId": id})
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
@@ -32,14 +55,27 @@
         }
         xhr.open("POST", "index", true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.responseType= 'json';
+        xhr.responseType = 'json';
         xhr.send(challengeId);
-        
+
         xhr.onload = function () {
 
-        if(xhr.response.result=true){
-            boxId = "status." + xhr.response.challenge;
-            document.getElementById(boxId).style.backgroundColor="green";
+            let boxId;
+            let functionTimeId;
+            let getTimeId;
+            let postTimeId;
+            if (xhr.response.result === true) {
+                boxId = "status." + xhr.response.challengeId;
+                functionTimeId = "functionTime." + xhr.response.challengeId;
+                getTimeId = "GET_Time." + xhr.response.challengeId;
+                postTimeId = "POST_Time." + xhr.response.challengeId;
+                document.getElementById(boxId).style.backgroundColor = "green";
+                document.getElementById(functionTimeId).innerText = xhr.response.functionTime + "ms";
+                document.getElementById(getTimeId).innerText = xhr.response.GET_Time + "ms";
+                document.getElementById(postTimeId).innerText = xhr.response.POST_Time + "ms";
+            }
+            for(let i =1; i <= listSize;i++){
+                document.getElementById("challengeId."+ i).disabled=false;
             }
         }
 

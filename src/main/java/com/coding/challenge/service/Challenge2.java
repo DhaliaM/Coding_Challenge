@@ -19,9 +19,10 @@ import java.net.http.HttpResponse;
 public class Challenge2 implements Challenge {
     private static final int ID = 2;
     private final HttpService httpService;
-
-    public Challenge2(HttpService httpService) {
+    private Benchmark benchmark;
+    public Challenge2(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
+        this.benchmark = benchmark;
     }
 
     @Override
@@ -36,16 +37,16 @@ public class Challenge2 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
-        long requestTime = 0;
-        long startTime = System.nanoTime();
+        benchmark.runBenchmark(true);
+
         int index = 0;
-        int numberOfRuns = 100;
+        int numberOfRuns = 1;
         for (int i = 0; i < numberOfRuns; i++) {
-            long requestStartTime = System.nanoTime();
+
+            benchmark.firstExclusiveBenchmark(true);
             String urlChallenge = "https://cc.the-morpheus.de/challenges/2/";
             HttpResponse<String> response = httpService.getChallenge(urlChallenge);
-            long requestStopTime = System.nanoTime();
-            requestTime = requestTime + (requestStopTime - requestStartTime);
+            benchmark.firstExclusiveBenchmark(false);
 
             try {
                 GetChallengeDto challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
@@ -54,20 +55,25 @@ public class Challenge2 implements Challenge {
                 e.printStackTrace();
             }
         }
-        long endTime = System.nanoTime();
-        long executionTime = (endTime - startTime - requestTime) / numberOfRuns; // Zeit zum Durchsuchen der Liste, ohne Server Zeiten
 
+        benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/1/";
         String jsonResult = String.valueOf(index);
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+
+        benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
-            int nanoTimeToMs = 1000000;
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
-            challengeDto.setUsedTime((float) executionTime / nanoTimeToMs);
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
+        benchmark.reset();
+
         return challengeDto;
     }
 }

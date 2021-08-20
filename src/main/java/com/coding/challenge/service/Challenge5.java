@@ -22,9 +22,11 @@ import java.util.stream.Stream;
 public class Challenge5 implements Challenge {
     private final static int ID = 5;
     HttpService httpService;
+    Benchmark benchmark;
 
-    public Challenge5(HttpService httpService) {
+    public Challenge5(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
+        this.benchmark = benchmark;
     }
 
     @Override
@@ -66,10 +68,14 @@ public class Challenge5 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
+        benchmark.runBenchmark(true);
+
+        benchmark.firstExclusiveBenchmark(true);
         String urlChallenge = "https://cc.the-morpheus.de/challenges/5/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
-        String challengeData = response.body();
+        benchmark.firstExclusiveBenchmark(false);
 
+        String challengeData = response.body();
         List<String> listedData = Stream.of(challengeData.split(" "))
                 .collect(Collectors.toList());
 
@@ -88,15 +94,23 @@ public class Challenge5 implements Challenge {
         }
         int result = stack.pop().intValue();
 
+        benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/5/";
         String jsonResult = String.valueOf(result);
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+
+        benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
+        benchmark.reset();
 
         return challengeDto;
     }

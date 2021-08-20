@@ -21,9 +21,11 @@ import java.util.List;
 public class Challenge4 implements Challenge {
     final static int ID = 4;
     HttpService httpService;
+    Benchmark benchmark;
 
-    public Challenge4(HttpService httpService) {
+    public Challenge4(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
+        this.benchmark = benchmark;
     }
 
     @Override
@@ -38,8 +40,12 @@ public class Challenge4 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
+        benchmark.runBenchmark(true);
+
+        benchmark.firstExclusiveBenchmark(true);
         String urlChallenge = "https://cc.the-morpheus.de/challenges/4/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
+        benchmark.firstExclusiveBenchmark(false);
 
         List<String> challengeDataList = null;
         int rotations = 0;
@@ -61,14 +67,22 @@ public class Challenge4 implements Challenge {
             e.printStackTrace();
         }
 
+        benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/4/";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+
+        benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
+        benchmark.reset();
 
         return challengeDto;
     }

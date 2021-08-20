@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Benchmark {
     private static final int NANO_TO_MS = 1000000;
-    long benchmarkTime;
-    long firstExclusiveBenchmarkTime;
-    long secondExclusiveBenchmarkTime;
+    float benchmarkTime;
+    float firstExclusiveBenchmarkTime;
+    float secondExclusiveBenchmarkTime;
 
     public float getBenchmarkTime() {
         return benchmarkTime / NANO_TO_MS;
@@ -28,12 +28,10 @@ public class Benchmark {
         return secondExclusiveBenchmarkTime / NANO_TO_MS;
     }
 
-    long startBenchmarkTime = 0;
+    long startBenchmarkTime;
     long endBenchmarkTime;
     long startFirstExclusiveBenchmarkTime;
-    long endFirstExclusiveBenchmarkTime;
     long startSecondExclusiveBenchmarkTime;
-    long endSecondExclusiveBenchmarkTime;
 
     /**
      * Startet und stoppt den Benchmark.
@@ -60,8 +58,7 @@ public class Benchmark {
             startFirstExclusiveBenchmarkTime = System.nanoTime();
         }
         if (runFirstExclusiveBenchmark == false) {
-            endFirstExclusiveBenchmarkTime = System.nanoTime();
-            firstExclusiveBenchmarkTime = firstExclusiveBenchmarkTime + (endFirstExclusiveBenchmarkTime - startFirstExclusiveBenchmarkTime);
+            firstExclusiveBenchmarkTime = firstExclusiveBenchmarkTime + (System.nanoTime() - startFirstExclusiveBenchmarkTime);
         }
     }
 
@@ -75,8 +72,16 @@ public class Benchmark {
             startSecondExclusiveBenchmarkTime = System.nanoTime();
         }
         if (runSecondExclusiveBenchmark == false) {
-            endSecondExclusiveBenchmarkTime = System.nanoTime();
-            secondExclusiveBenchmarkTime = secondExclusiveBenchmarkTime + (endSecondExclusiveBenchmarkTime - startSecondExclusiveBenchmarkTime);
+            secondExclusiveBenchmarkTime = secondExclusiveBenchmarkTime + (System.nanoTime()- startSecondExclusiveBenchmarkTime);
         }
+    }
+    public void reset(){
+        this.benchmarkTime=0;
+        this.firstExclusiveBenchmarkTime = 0;
+        this.secondExclusiveBenchmarkTime = 0;
+        this.startBenchmarkTime = 0;
+        this.endBenchmarkTime = 0;
+        this.startFirstExclusiveBenchmarkTime = 0;
+        this.startSecondExclusiveBenchmarkTime = 0;
     }
 }

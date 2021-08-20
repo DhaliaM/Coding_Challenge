@@ -21,9 +21,11 @@ import java.util.stream.Collectors;
 public class Challenge6 implements Challenge {
     private static final int ID = 6;
     HttpService httpService;
+    Benchmark benchmark;
 
-    public Challenge6(HttpService httpService) {
+    public Challenge6(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
+        this.benchmark = benchmark;
     }
 
     @Override
@@ -38,10 +40,14 @@ public class Challenge6 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
+        benchmark.runBenchmark(true);
+
+        benchmark.firstExclusiveBenchmark(true);
         String urlChallenge = "https://cc.the-morpheus.de/challenges/6/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
-        String challengeData = response.body();
+        benchmark.firstExclusiveBenchmark(false);
 
+        String challengeData = response.body();
         long decimalData = Long.parseLong(challengeData);
         List<Integer> listedRemainder = new ArrayList<>();
         while (decimalData > 0) {
@@ -54,15 +60,22 @@ public class Challenge6 implements Challenge {
                 .collect(Collectors.toList());
         String jsonResult = reverseList.toString();
 
+        benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/6/";
-
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+
+        benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
+        benchmark.reset();
 
         return challengeDto;
     }

@@ -24,9 +24,11 @@ import java.util.stream.Collectors;
 public class Challenge7 implements Challenge {
     private static final int ID = 7;
     HttpService httpService;
+    Benchmark benchmark;
 
-    public Challenge7(HttpService httpService) {
+    public Challenge7(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
+        this.benchmark = benchmark;
     }
 
     @Override
@@ -41,17 +43,21 @@ public class Challenge7 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
+        benchmark.runBenchmark(true);
+
+        benchmark.firstExclusiveBenchmark(true);
         String urlChallenge = "https://cc.the-morpheus.de/challenges/7/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
+        benchmark.firstExclusiveBenchmark(false);
+
         GetChallengeDto challengeData = null;
-        int key =0;
+        int key = 0;
         try {
             challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
             key = Integer.parseInt(challengeData.getKey());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
 
         assert challengeData != null;
         List<Integer> listSearchData = challengeData.getStringList().stream()
@@ -60,7 +66,6 @@ public class Challenge7 implements Challenge {
 
         int firstOperandIndex = 0;
         int secondOperandIndex = 0;
-
         Map<Integer, Integer> checkedNumbers = new HashMap<>();
 
         for (int i = 0; i < listSearchData.size(); i++) {
@@ -76,15 +81,23 @@ public class Challenge7 implements Challenge {
         result.add(firstOperandIndex);
         result.add(secondOperandIndex);
 
+        benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/7/";
         String jsonResult = result.toString();
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+
+        benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
+        benchmark.reset();
 
         return challengeDto;
     }

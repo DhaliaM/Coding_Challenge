@@ -3,14 +3,13 @@ package com.coding.challenge.service;
 import com.coding.challenge.ui.ChallengeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 /**
  * Diese Klasse absolviert die 8. Challenge.
  * Die Challenge besteht darin die Daten von der Rest-SST "https://cc.the-morpheus.de/challenges/8/" über GET
@@ -23,16 +22,18 @@ import java.util.stream.Collectors;
 public class Challenge8 implements Challenge {
     private static final int ID = 8;
     HttpService httpService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(Challenge8.class);
+    Benchmark benchmark;
 
-    public Challenge8(HttpService httpService) {
+    public Challenge8(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
+        this.benchmark = benchmark;
     }
 
     @Override
     public int getId() {
         return ID;
     }
+
     /**
      * Startet die Challenge.
      *
@@ -40,10 +41,15 @@ public class Challenge8 implements Challenge {
      */
     @Override
     public ChallengeDto runChallenge() {
+        benchmark.runBenchmark(true);
+
+        benchmark.firstExclusiveBenchmark(true);
         String urlChallenge = "https://cc.the-morpheus.de/challenges/8/";
         HttpResponse<String> response = httpService.getChallenge(urlChallenge);
+        benchmark.firstExclusiveBenchmark(false);
+
         GetChallengeDto challengeData = null;
-        int key =0;
+        int key = 0;
         try {
             challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
             key = Integer.parseInt(challengeData.getKey());
@@ -80,19 +86,23 @@ public class Challenge8 implements Challenge {
         result.add(thirdOperandIndex);
         result.add(fourthOperandIndex);
 
-        LOGGER.error(String.valueOf(key));
-        LOGGER.error(String.valueOf(listSearchData.get(firstOperandIndex)+listSearchData.get(secondOperandIndex)+listSearchData.get(thirdOperandIndex)+listSearchData.get(fourthOperandIndex)));
-
-
+        benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/8/";
         String jsonResult = result.toString();
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
-        LOGGER.error(jsonResult);
+        benchmark.secondExclusiveBenchmark(false);
+
+        benchmark.runBenchmark(false);
+
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
+        benchmark.reset();
 
         return challengeDto;
     }

@@ -3,8 +3,6 @@ package com.coding.challenge.service;
 import com.coding.challenge.ui.ChallengeDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
@@ -23,15 +21,13 @@ public class Challenge3 implements Challenge {
     private static final int ID = 3;
     private final HttpService httpService;
     private final KthSearchAlgorithm kthSearchAlgorithm;
-    private final Benchmark benchmark;
+    private Benchmark benchmark;
 
     public Challenge3(HttpService httpService, KthSearchAlgorithm kthSearchAlgorithm, Benchmark benchmark) {
         this.httpService = httpService;
         this.kthSearchAlgorithm = kthSearchAlgorithm;
         this.benchmark = benchmark;
     }
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Challenge3.class);
 
     @Override
     public int getId() {
@@ -55,7 +51,6 @@ public class Challenge3 implements Challenge {
         GetChallengeDto challengeData = null;
         try {
             challengeData = new ObjectMapper().readValue(response.body(), GetChallengeDto.class);
-
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -80,17 +75,19 @@ public class Challenge3 implements Challenge {
         String urlSolution = "https://cc.the-morpheus.de/solutions/3/";
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
         benchmark.secondExclusiveBenchmark(false);
+
         benchmark.runBenchmark(false);
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
             challengeDto.setResultChallenge(true);
             challengeDto.setChallengeId(ID);
-            challengeDto.setUsedTime(benchmark.getBenchmarkTime());
+            challengeDto.setFunctionTime(benchmark.getBenchmarkTime());
+            challengeDto.setServerGetTime(benchmark.getFirstExclusiveBenchmarkTime());
+            challengeDto.setServerPostTime(benchmark.getSecondExclusiveBenchmarkTime());
         }
-        LOGGER.error(benchmark.getFirstExclusiveBenchmarkTime() + "ms");
-        LOGGER.error(benchmark.getSecondExclusiveBenchmarkTime() + "ms");
-        LOGGER.error(benchmark.getBenchmarkTime() + "ms");
+        benchmark.reset();
+
         return challengeDto;
     }
 }

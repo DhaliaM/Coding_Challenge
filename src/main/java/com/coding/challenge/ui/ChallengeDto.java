@@ -8,14 +8,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @author Dhalia
  */
 public class ChallengeDto {
-    @JsonProperty("challenge")
+    @JsonProperty("challengeId")
     private int challengeId;
 
     @JsonProperty("result")
     private boolean resultChallenge;
 
-    @JsonProperty("usedTime")
-    private float usedTime;
+    @JsonProperty("functionTime")
+    private float functionTime;
+
+    @JsonProperty("GET_Time")
+    private float serverGetTime;
+
+    @JsonProperty("POST_Time")
+    private float serverPostTime;
 
     public int getChallengeId() {
         return challengeId;
@@ -33,12 +39,28 @@ public class ChallengeDto {
         this.resultChallenge = resultChallenge;
     }
 
-    public float getUsedTime() {
-        return usedTime;
+    public float getFunctionTime() {
+        return functionTime;
     }
 
-    public void setUsedTime(float usedTime) {
-        this.usedTime = usedTime;
+    public void setFunctionTime(float functionTime) {
+        this.functionTime = functionTime;
+    }
+
+    public float getServerGetTime() {
+        return serverGetTime;
+    }
+
+    public void setServerGetTime(float serverGetTime) {
+        this.serverGetTime = serverGetTime;
+    }
+
+    public float getServerPostTime() {
+        return serverPostTime;
+    }
+
+    public void setServerPostTime(float serverPostTime) {
+        this.serverPostTime = serverPostTime;
     }
 
     @Override
@@ -46,7 +68,9 @@ public class ChallengeDto {
         return "ChallengeDto{" +
                 "challengeId=" + challengeId +
                 ", resultChallenge=" + resultChallenge +
-                ", usedTime=" + usedTime +
+                ", functionTime=" + functionTime +
+                ", serverGetTime=" + serverGetTime +
+                ", serverPostTime=" + serverPostTime +
                 '}';
     }
 
