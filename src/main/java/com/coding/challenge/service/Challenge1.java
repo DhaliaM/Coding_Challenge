@@ -50,7 +50,7 @@ public class Challenge1 implements Challenge {
         benchmark.secondExclusiveBenchmark(false);
 
         benchmark.runBenchmark(false);
-        benchmark.reset();
+
 
         ChallengeDto challengeDto = new ChallengeDto();
         if (solution.statusCode() == 200) {
@@ -60,6 +60,7 @@ public class Challenge1 implements Challenge {
             challengeDto.setServerGetTime(benchmark.firstExclusiveBenchmarkTime);
             challengeDto.setServerPostTime(benchmark.secondExclusiveBenchmarkTime);
         }
+        benchmark.reset();
 
         return challengeDto;
     }
