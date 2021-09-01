@@ -1,12 +1,12 @@
 package com.coding.challenge.service;
 
 import com.coding.challenge.ui.ChallengeDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +23,7 @@ public class Challenge5 implements Challenge {
     private final static int ID = 5;
     HttpService httpService;
     Benchmark benchmark;
-
+    Logger LOGGER = LoggerFactory.getLogger(Challenge5.class);
     public Challenge5(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
         this.benchmark = benchmark;
@@ -38,24 +38,24 @@ public class Challenge5 implements Challenge {
      * Eine Hilfsfunktion um einen String mit mathematischen Operatoren zu vergleichen, und die entsprechende
      * Operation durchzuführen.
      *
-     * @param a        erster Operand
-     * @param b        zweiter Operand
+     * @param firstOperand        erster Operand
+     * @param secondOperand        zweiter Operand
      * @param operator String welcher den Operator enthält
      * @return Ergebnis vom Typ Float
      */
-    private Float calculate(Float a, Float b, String operator) {
+    private Float calculate(Float firstOperand, Float secondOperand, String operator) {
         Float result = null;
         if (Objects.equals(operator, "+")) {
-            result = a + b;
+            result = firstOperand + secondOperand;
         }
         if (Objects.equals(operator, "-")) {
-            result = a - b;
+            result = firstOperand - secondOperand;
         }
         if (Objects.equals(operator, "/")) {
-            result = a / b;
+            result = firstOperand / secondOperand;
         }
         if (Objects.equals(operator, "*")) {
-            result = a * b;
+            result = firstOperand * secondOperand;
         }
 
         return result;
@@ -79,24 +79,25 @@ public class Challenge5 implements Challenge {
         List<String> listedData = Stream.of(challengeData.split(" "))
                 .collect(Collectors.toList());
 
-        Stack<Float> stack = new Stack<>();
+        Deque<Float> deque = new ArrayDeque<>();
         for (String o : listedData) {
             if (o.matches("-?(0|[1-9]\\d*)")) { // o ist eine Zahl
                 int n = Integer.parseInt(o);
-                stack.push((float) n);
+                deque.offerFirst((float) n);
             }
             if (!o.matches("-?(0|[1-9]\\d*)")) { // o ist keine Zahl
-                float a = stack.pop();
-                float b = stack.pop();
-                float c = calculate(a, b, o);
-                stack.push(c);
+                float firstOperand = deque.pollFirst();
+                float secondOperand = deque.pollFirst();
+                float postfixResult = calculate(firstOperand, secondOperand, o);
+                deque.offerFirst(postfixResult);
+
             }
         }
-        int result = stack.pop().intValue();
+        float postfixResult = deque.pollFirst();
 
         benchmark.secondExclusiveBenchmark(true);
         String urlSolution = "https://cc.the-morpheus.de/solutions/5/";
-        String jsonResult = String.valueOf(result);
+        String jsonResult = String.valueOf((int)postfixResult);
         HttpResponse solution = httpService.sendSolutionToken(urlSolution, jsonResult);
         benchmark.secondExclusiveBenchmark(false);
 
