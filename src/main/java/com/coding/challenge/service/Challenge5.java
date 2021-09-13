@@ -1,8 +1,6 @@
 package com.coding.challenge.service;
 
 import com.coding.challenge.ui.ChallengeDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.http.HttpResponse;
@@ -23,7 +21,7 @@ public class Challenge5 implements Challenge {
     private final static int ID = 5;
     HttpService httpService;
     Benchmark benchmark;
-    Logger LOGGER = LoggerFactory.getLogger(Challenge5.class);
+
     public Challenge5(HttpService httpService, Benchmark benchmark) {
         this.httpService = httpService;
         this.benchmark = benchmark;
